@@ -18,7 +18,6 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Shared.DAL;
 using Shared.Repositories;
-using SireusLicenseVerification;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -29,13 +28,6 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        var licenseManager = new LicenseManager();
-        if (!licenseManager.ValidateLicense("appsettings.json"))
-        {
-            Console.WriteLine("Invalid license key.");
-            Environment.Exit(0);
-        }
-
         CultureInfo.CurrentUICulture = new CultureInfo("en-US");
 
         var builder = WebApplication.CreateBuilder(args);
