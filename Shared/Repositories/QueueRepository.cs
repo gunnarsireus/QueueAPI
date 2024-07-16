@@ -19,20 +19,43 @@ public class QueueRepository : IQueueRepository
     }
 
 
-    public async Task<ClientQueueEntity> GetMessageFromQlientQueue()
+    public async Task<ClientQueueEntity> GetMessageFromClientQueue()
     {
         await using QueueDbContext context = GetContext();
 
-        var item = await context.ClientQueue
-            .Where(q => q.QueueStatus == QueueStatus.New)
-            .OrderBy(q => q.Created)
-            .FirstOrDefaultAsync();
+        await using var transaction = await context.Database.BeginTransactionAsync();
 
-        if (item == null) return null;
+        try
+        {
+            var item = await context.ClientQueue
+                .Where(q => q.QueueStatus == QueueStatus.New)
+                .OrderBy(q => q.Created)
+                .FirstOrDefaultAsync();
 
-        var sql = $"update ClientQueue set QueueStatus = {(int)QueueStatus.Processed}, StatusDate = '{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}' where Id = '{item.Id}'";
-        var result = await context.Database.ExecuteSqlRawAsync(sql);
-        return item;
+            if (item == null)
+            {
+                await transaction.RollbackAsync();
+                return null;
+            }
+
+            // Update the item's QueueStatus and StatusDate
+            item.QueueStatus = QueueStatus.Processed;
+            item.StatusDate = DateTime.Now;
+
+            // Save changes to the database
+            await context.SaveChangesAsync();
+
+            // Commit the transaction
+            await transaction.CommitAsync();
+
+            return item;
+        }
+        catch (Exception)
+        {
+            // Rollback the transaction in case of an error
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
 

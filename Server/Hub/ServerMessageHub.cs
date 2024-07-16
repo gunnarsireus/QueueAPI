@@ -28,7 +28,7 @@ public class ServerMessageHub : IServerMessageHub
     {
         while (true)
         {
-            var nextPackage = await _queueRepository.GetMessageFromQlientQueue();
+            var nextPackage = await _queueRepository.GetMessageFromClientQueue();
             if (nextPackage == null) break;
 
             await HandleMessageFormClient(nextPackage);
