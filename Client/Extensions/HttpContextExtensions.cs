@@ -6,7 +6,7 @@ namespace Client.Extensions
 {
     public static class HttpContextExtensions
     {
-        private const string NonceKey = "SIREUS_NONCE";
+        private const string NonceKey = "CLIENT_NONCE";
 
         public static void SetPageSecurityHeaders(this HttpContext context, bool isDevelopment)
         {
