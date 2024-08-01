@@ -104,14 +104,14 @@ public class Program
         {
             OnPrepareResponse = (context) =>
             {
-                //context.Context.SetStaticFileSecurityHeaders(isDevelopment: envIsDevelopment);
+                context.Context.SetStaticFileSecurityHeaders(isDevelopment: envIsDevelopment);
             }
         });
 
         app.Use(async (context, next) =>
         {
             context.SetNonce();
-            //context.SetPageSecurityHeaders(isDevelopment: envIsDevelopment);
+            context.SetPageSecurityHeaders(isDevelopment: envIsDevelopment);
             await next().ConfigureAwait(false);
         });
 

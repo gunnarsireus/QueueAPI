@@ -24,7 +24,21 @@ $(".uppercase").on('keyup', function () {
 
 const clearErrors = () => {
   $(".validation-summary-errors").empty();
+  var errorElements = document.getElementsByClassName('text-danger');
+  for (var i = 0; i < errorElements.length; i++) {
+    errorElements[i].innerHTML = '';
+  }
 };
+
+const setupClearErrors = () => {
+  clearErrors();
+  var form = document.getElementById('CreateForm');
+  if (form) {
+    form.addEventListener('mousedown', clearErrors);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', setupClearErrors);
 
 const carTimerJob = (apiPort) => {
   const halfSecond = 500;
