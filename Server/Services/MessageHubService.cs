@@ -8,11 +8,11 @@ namespace Server.Services
 {
     public class MessageHubService : BackgroundService
     {
-        private readonly IServerMessageHub _messageHub;
+        private readonly IServerMessageHub _serverMessageHub;
 
-        public MessageHubService(IServerMessageHub messageHub)
+        public MessageHubService(IServerMessageHub serverMessageHub)
         {
-            _messageHub = messageHub;
+            _serverMessageHub = serverMessageHub;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,7 +21,7 @@ namespace Server.Services
             {
                 try
                 {
-                    await _messageHub.CheckForNewClientMessage();
+                    await _serverMessageHub.CheckForNewClientMessage();
 
                     await Task.Delay(100, stoppingToken);
                 }
