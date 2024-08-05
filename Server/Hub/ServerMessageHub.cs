@@ -31,11 +31,11 @@ public class ServerMessageHub : IServerMessageHub
             var nextPackage = await _queueRepository.GetMessageFromClientQueue();
             if (nextPackage == null) break;
 
-            await HandleMessageFormClient(nextPackage);
+            await HandleMessageFromClient(nextPackage);
         }
     }
 
-    private async Task HandleMessageFormClient(ClientQueueEntity queuePackage)
+    private async Task HandleMessageFromClient(ClientQueueEntity queuePackage)
     {
         string[] classNameParts = queuePackage.TypeName.Split('.');
         string simpleClassName = classNameParts[^1];
